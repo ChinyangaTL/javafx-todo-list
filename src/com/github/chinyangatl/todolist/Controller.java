@@ -1,13 +1,17 @@
 package com.github.chinyangatl.todolist;
 
 import com.github.chinyangatl.todolist.datamodel.TodoItem;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,8 @@ public class Controller {
     private ListView<TodoItem> todoListView;
     @FXML
     private TextArea detailsArea;
+    @FXML
+    private Label labelDeadline;
 
     public void initialize() {
         TodoItem item1 = new TodoItem("Quit Java", "Give up on this terrible language",
@@ -34,19 +40,30 @@ public class Controller {
         todoItems.add(item3);
         todoItems.add(item4);
 
+        todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
+            @Override
+            public void changed(ObservableValue<? extends TodoItem> observableValue, TodoItem todoItem, TodoItem t1) {
+                if(t1 != null) {
+                    TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                    detailsArea.setText(item.getDetails());
+                    DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+                    labelDeadline.setText(df.format(item.getDeadline()));
+                }
+            }
+        });
+
         todoListView.getItems().setAll(todoItems);
         todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+
+        todoListView.getSelectionModel().selectFirst();
     }
 
     @FXML
     public void handleClickListView() {
         TodoItem item = (TodoItem) todoListView.getSelectionModel().getSelectedItem();
+        detailsArea.setText(item.getDetails());
+        labelDeadline.setText(item.getDeadline().toString());
 
-        StringBuilder stringBuilder = new StringBuilder(item.getDetails());
-        stringBuilder.append("\n\n\n\n");
-        stringBuilder.append("Due: ");
-        stringBuilder.append(item.getDeadline().toString());
-        detailsArea.setText(stringBuilder.toString());
 
     }
 }

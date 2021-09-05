@@ -6,14 +6,31 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
 <BorderPane fx:controller="com.github.chinyangatl.todolist.Controller"
             xmlns:fx="http://javafx.com/fxml">
     <left>
-        <ListView fx:id="todoListView" onMouseClicked="#handleClickListView">
+        <ListView fx:id="todoListView">
 
         </ListView>
     </left>
     <center>
-        <TextArea fx:id="detailsArea"/>
+        <VBox style="-fx-background-color: white">
+            <TextArea fx:id="detailsArea" VBox.vgrow="ALWAYS"/>
+            <HBox>
+                <Label text="Due: " style="-fx-background-color: white">
+                    <font>
+                        <Font name="Roboto bold" size="20"/>
+                    </font>
+                </Label>
+                <Label fx:id="labelDeadline" style="-fx-background-color: white">
+                    <font>
+                        <Font name="Roboto bold" size="20"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
     </center>
 </BorderPane>
